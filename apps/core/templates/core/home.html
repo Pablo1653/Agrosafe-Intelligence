@@ -1,2 +1,20 @@
-<!-- Ejemplo básico de Lorem Ipsum en HTML -->
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>Copied!   
+{% extends "base.html" %}
+
+{% block title %}Inicio | AgroSafe Intelligence{% endblock %}
+
+{% block content %}
+    <h1 class="h3 mb-4">Bienvenido a AgroSafe Intelligence</h1>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <i class="bi bi-building fs-2 text-success"></i>
+                    <h5 class="card-title mt-2">Empresas</h5>
+                    <p class="card-text text-muted">Gestioná el registro de empresas del agro.</p>
+                    <a href="{% url 'companies:company_list' %}" class="btn btn-outline-success btn-sm">Ver empresas</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,26 +1,83 @@
+{% extends "base.html" %}
 
+{% block title %}Empresas | AgroSafe Intelligence{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Companies</title>
-</head>
-<body>
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0"><i class="bi bi-building text-success"></i> Empresas</h1>
+        <a href="#" class="btn btn-success">
+            <i class="bi bi-plus-lg"></i> Nueva empresa
+        </a>
+    </div>
 
-<h1>Companies</h1>
-
-<hr>
-
-{% for company in companies %}
-
-<p>{{ company.business_name }}</p>
-
-{% empty %}
-
-<p>No companies found.</p>
-
-{% endfor %}
-
-</body>
-</html>
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Razón social</th>
+                            <th>Nombre comercial</th>
+                            <th>CUIT</th>
+                            <th>Sitio web</th>
+                            <th>Rubro</th>
+                            <th>Localidad</th>
+                            <th>Estado</th>
+                            <th>Activa</th>
+                            <th>Creada</th>
+                            <th>Actualizada</th>
+                            <th>Creada por</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for company in companies %}
+                        <tr data-uuid="{{ company.company_uuid }}">
+                            <td><strong>{{ company.business_name }}</strong></td>
+                            <td>{{ company.trade_name|default:"—" }}</td>
+                            <td>{{ company.cuit|default:"—" }}</td>
+                            <td>
+                                {% if company.website %}
+                                    <a href="{{ company.website }}" target="_blank" rel="noopener">
+                                        <i class="bi bi-box-arrow-up-right"></i> Visitar
+                                    </a>
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>{{ company.industry|default:"—" }}</td>
+                            <td>{{ company.city|default:"—" }}</td>
+                            <td>
+                                {% if company.status == "CLIENT" %}
+                                    <span class="badge bg-success">Cliente</span>
+                                {% elif company.status == "QUALIFIED" %}
+                                    <span class="badge bg-info text-dark">Calificado</span>
+                                {% elif company.status == "INACTIVE" %}
+                                    <span class="badge bg-secondary">Inactivo</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Prospecto</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if company.is_active %}
+                                    <span class="badge bg-success-subtle text-success border border-success">Sí</span>
+                                {% else %}
+                                    <span class="badge bg-danger-subtle text-danger border border-danger">No</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ company.created_at|date:"d/m/Y H:i" }}</td>
+                            <td>{{ company.updated_at|date:"d/m/Y H:i" }}</td>
+                            <td>{{ company.created_by|default:"—" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="11" class="text-center text-muted py-4">
+                                No se encontraron empresas.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

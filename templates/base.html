@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AgroSafe Intelligence{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons (para el logo y el menú) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --agro-green: #1e5631;
+            --agro-green-dark: #163f24;
+            --agro-accent: #8bc34a;
+        }
+        body {
+            background-color: #f5f7f5;
+            min-height: 100vh;
+        }
+        /* Navbar */
+        .navbar-agro {
+            background-color: var(--agro-green);
+        }
+        .navbar-agro .navbar-brand {
+            font-weight: 700;
+            color: #fff;
+        }
+        .navbar-agro .navbar-brand i {
+            color: var(--agro-accent);
+        }
+        .navbar-agro .nav-link {
+            color: rgba(255,255,255,0.85);
+        }
+        .navbar-agro .nav-link:hover,
+        .navbar-agro .nav-link.active {
+            color: #fff;
+        }
+        /* Sidebar */
+        .sidebar {
+            background-color: #ffffff;
+            border-right: 1px solid #e0e0e0;
+            min-height: calc(100vh - 56px);
+            padding-top: 1rem;
+        }
+        .sidebar .nav-link {
+            color: #333;
+            border-radius: 6px;
+            margin-bottom: 2px;
+        }
+        .sidebar .nav-link i {
+            width: 1.3rem;
+            color: var(--agro-green);
+        }
+        .sidebar .nav-link.active,
+        .sidebar .nav-link:hover {
+            background-color: #eaf3ea;
+            color: var(--agro-green-dark);
+        }
+        main {
+            padding: 1.5rem;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg navbar-agro sticky-top px-3">
+    <div class="container-fluid">
+        <!-- Botón para mostrar/ocultar sidebar en mobile -->
+        <button class="btn btn-outline-light me-2 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
+        <img src="{% static 'img/LogoAgroSafe.png' %}" alt="AgroSafe" height="60"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+        <i class="bi bi-shield-check fs-4" style="display:none;"></i>
+        <span>AgroSafe <span class="fw-light">Intelligence</span></span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'companies:company_list' %}">Empresas</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- ===== SIDEBAR (desktop) ===== -->
+        <aside class="col-lg-2 d-none d-lg-block sidebar">
+            {% include "partials/_sidebar_nav.html" %}
+        </aside>
+
+        <!-- ===== SIDEBAR (offcanvas, mobile) ===== -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarOffcanvas">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title">Menú</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+            <div class="offcanvas-body">
+                {% include "partials/_sidebar_nav.html" %}
+            </div>
+        </div>
+
+        <!-- ===== CONTENIDO PRINCIPAL ===== -->
+        <main class="col-lg-10">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}{% endblock %}
+
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS Bundle -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>
