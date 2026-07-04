@@ -1,0 +1,26 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Companies</title>
+</head>
+<body>
+
+<h1>Companies</h1>
+
+<hr>
+
+{% for company in companies %}
+
+<p>{{ company.business_name }}</p>
+
+{% empty %}
+
+<p>No companies found.</p>
+
+{% endfor %}
+
+</body>
+</html>
