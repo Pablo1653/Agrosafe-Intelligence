@@ -6,20 +6,27 @@ from .forms import CompanyForm
 
 def company_list(request):
     """
-    Display all registered companies.
+    Display registered companies.
+ 
+    By default only active companies are shown. Pass ?mostrar_inactivas=1
+    in the query string to include soft-deleted (is_active=False) ones too.
     """
+    show_inactive = request.GET.get("mostrar_inactivas") == "1"
+ 
     companies = Company.objects.all()
-
+    if not show_inactive:
+        companies = companies.filter(is_active=True)
+ 
     context = {
-        "companies": companies
+        "companies": companies,
+        "show_inactive": show_inactive,
     }
-
+ 
     return render(
         request,
         "companies/company_list.html",
         context,
     )
-
 
 def company_detail(request, company_uuid):
     """
@@ -84,3 +91,42 @@ def company_update(request, company_uuid):
         "company": company,
     }
     return render(request, "companies/company_form.html", context)
+
+def company_deactivate(request, company_uuid):
+    """
+    Soft-delete a company: sets is_active=False instead of deleting the row.
+    GET shows a confirmation page; POST performs the deactivation.
+    """
+    company = get_object_or_404(Company, company_uuid=company_uuid)
+ 
+    if request.method == "POST":
+        company.is_active = False
+        company.save(update_fields=["is_active", "updated_at"])
+        messages.success(request, f"Empresa \"{company.business_name}\" dada de baja.")
+        return redirect("companies:company_list")
+ 
+    context = {
+        "company": company,
+        "action": "deactivate",
+    }
+    return render(request, "companies/company_confirm_action.html", context)
+ 
+ 
+def company_activate(request, company_uuid):
+    """
+    Reactivate a previously soft-deleted company.
+    GET shows a confirmation page; POST performs the reactivation.
+    """
+    company = get_object_or_404(Company, company_uuid=company_uuid)
+ 
+    if request.method == "POST":
+        company.is_active = True
+        company.save(update_fields=["is_active", "updated_at"])
+        messages.success(request, f"Empresa \"{company.business_name}\" reactivada.")
+        return redirect("companies:company_detail", company_uuid=company.company_uuid)
+ 
+    context = {
+        "company": company,
+        "action": "activate",
+    }
+    return render(request, "companies/company_confirm_action.html", context)

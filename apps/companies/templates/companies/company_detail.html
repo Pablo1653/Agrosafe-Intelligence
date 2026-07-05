@@ -34,8 +34,17 @@
         </div>
         <div class="d-flex gap-2">
             <a href="{% url 'companies:company_update' company.company_uuid %}" class="btn btn-outline-secondary">
-            <i class="bi bi-pencil"></i> Editar
+                <i class="bi bi-pencil"></i> Editar
+            </a>
+            {% if company.is_active %}
+                <a href="{% url 'companies:company_deactivate' company.company_uuid %}" class="btn btn-outline-danger">
+                    <i class="bi bi-slash-circle"></i> Dar de baja
                 </a>
+            {% else %}
+                <a href="{% url 'companies:company_activate' company.company_uuid %}" class="btn btn-outline-success">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reactivar
+                </a>
+            {% endif %}
             <a href="{% url 'companies:company_list' %}" class="btn btn-outline-dark">
                 <i class="bi bi-arrow-left"></i> Volver
             </a>

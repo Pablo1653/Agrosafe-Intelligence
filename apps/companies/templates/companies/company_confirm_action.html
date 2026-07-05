@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar acción | AgroSafe Intelligence{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center py-5">
+
+                    {% if action == "deactivate" %}
+                        <i class="bi bi-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+                        <h1 class="h4 mt-3">¿Dar de baja esta empresa?</h1>
+                        <p class="text-muted">
+                            <strong>{{ company.business_name }}</strong> va a quedar marcada como <strong>inactiva</strong>.
+                            No se borra ningún dato: podés reactivarla cuando quieras.
+                        </p>
+                    {% else %}
+                        <i class="bi bi-arrow-counterclockwise text-success" style="font-size: 3rem;"></i>
+                        <h1 class="h4 mt-3">¿Reactivar esta empresa?</h1>
+                        <p class="text-muted">
+                            <strong>{{ company.business_name }}</strong> va a volver a aparecer como <strong>activa</strong>
+                            en el listado por defecto.
+                        </p>
+                    {% endif %}
+
+                    <form method="post" class="d-flex justify-content-center gap-2 mt-4">
+                        {% csrf_token %}
+                        {% if action == "deactivate" %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-slash-circle"></i> Sí, dar de baja
+                            </button>
+                        {% else %}
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg"></i> Sí, reactivar
+                            </button>
+                        {% endif %}
+                        <a href="{% url 'companies:company_detail' company.company_uuid %}" class="btn btn-outline-secondary">
+                            Cancelar
+                        </a>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

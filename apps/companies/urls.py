@@ -8,4 +8,6 @@ urlpatterns = [
     path("nueva/", views.company_create, name="company_create"),
     path("<uuid:company_uuid>/", views.company_detail, name="company_detail"),
     path("<uuid:company_uuid>/editar/", views.company_update, name="company_update"),
+    path("<uuid:company_uuid>/baja/", views.company_deactivate, name="company_deactivate"),
+    path("<uuid:company_uuid>/activar/", views.company_activate, name="company_activate"),
 ]
