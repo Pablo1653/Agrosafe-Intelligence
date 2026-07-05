@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if is_edit %}Editar {{ company.business_name }}{% else %}Nueva empresa{% endif %} | AgroSafe Intelligence
+{% endblock %}
+
+{% block content %}
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'companies:company_list' %}">Empresas</a></li>
+            {% if is_edit %}
+                <li class="breadcrumb-item"><a href="{% url 'companies:company_detail' company.company_uuid %}">{{ company.business_name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Editar</li>
+            {% else %}
+                <li class="breadcrumb-item active" aria-current="page">Nueva empresa</li>
+            {% endif %}
+        </ol>
+    </nav>
+
+    <h1 class="h3 mb-4">
+        {% if is_edit %}
+            <i class="bi bi-pencil text-success"></i> Editar empresa
+        {% else %}
+            <i class="bi bi-plus-lg text-success"></i> Nueva empresa
+        {% endif %}
+    </h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.business_name.id_for_label }}" class="form-label">Razón social *</label>
+                        {{ form.business_name }}
+                        {% if form.business_name.errors %}
+                            <div class="text-danger small">{{ form.business_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="{{ form.trade_name.id_for_label }}" class="form-label">Nombre comercial</label>
+                        {{ form.trade_name }}
+                        {% if form.trade_name.errors %}
+                            <div class="text-danger small">{{ form.trade_name.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="{{ form.cuit.id_for_label }}" class="form-label">CUIT</label>
+                        {{ form.cuit }}
+                        {% if form.cuit.errors %}
+                            <div class="text-danger small">{{ form.cuit.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="{{ form.website.id_for_label }}" class="form-label">Sitio web</label>
+                        {{ form.website }}
+                        {% if form.website.errors %}
+                            <div class="text-danger small">{{ form.website.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="{{ form.industry.id_for_label }}" class="form-label">Rubro</label>
+                        {{ form.industry }}
+                        {% if form.industry.errors %}
+                            <div class="text-danger small">{{ form.industry.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="{{ form.city.id_for_label }}" class="form-label">Localidad</label>
+                        {{ form.city }}
+                        {% if form.city.errors %}
+                            <div class="text-danger small">{{ form.city.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="{{ form.status.id_for_label }}" class="form-label">Estado</label>
+                        {{ form.status }}
+                        {% if form.status.errors %}
+                            <div class="text-danger small">{{ form.status.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-lg"></i> {% if is_edit %}Guardar cambios{% else %}Crear empresa{% endif %}
+                    </button>
+                    <a href="{% if is_edit %}{% url 'companies:company_detail' company.company_uuid %}{% else %}{% url 'companies:company_list' %}{% endif %}"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
