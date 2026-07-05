@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}{{ company.business_name }} | AgroSafe Intelligence{% endblock %}
+
+{% block content %}
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'companies:company_list' %}">Empresas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ company.business_name }}</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h1 class="h3 mb-1">{{ company.business_name }}</h1>
+            <div>
+                {% if company.status == "CLIENT" %}
+                    <span class="badge bg-success">Cliente</span>
+                {% elif company.status == "QUALIFIED" %}
+                    <span class="badge bg-info text-dark">Calificado</span>
+                {% elif company.status == "INACTIVE" %}
+                    <span class="badge bg-secondary">Inactivo</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Prospecto</span>
+                {% endif %}
+
+                {% if company.is_active %}
+                    <span class="badge bg-success-subtle text-success border border-success">Activa</span>
+                {% else %}
+                    <span class="badge bg-danger-subtle text-danger border border-danger">Inactiva</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="#" class="btn btn-outline-secondary">
+                <i class="bi bi-pencil"></i> Editar
+            </a>
+            <a href="{% url 'companies:company_list' %}" class="btn btn-outline-dark">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <!-- Datos generales -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-white">
+                    <strong><i class="bi bi-building text-success"></i> Datos generales</strong>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm mb-0">
+                        <tbody>
+                            <tr>
+                                <th class="text-muted" style="width: 220px;">Razón social</th>
+                                <td>{{ company.business_name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">Nombre comercial</th>
+                                <td>{{ company.trade_name|default:"—" }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">CUIT</th>
+                                <td>{{ company.cuit|default:"—" }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">Sitio web</th>
+                                <td>
+                                    {% if company.website %}
+                                        <a href="{{ company.website }}" target="_blank" rel="noopener">
+                                            {{ company.website }} <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">Rubro</th>
+                                <td>{{ company.industry|default:"—" }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">Localidad</th>
+                                <td>{{ company.city|default:"—" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Placeholders para módulos relacionados (próximamente) -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <strong><i class="bi bi-person-lines-fill text-success"></i> Contactos</strong>
+                    <span class="badge bg-secondary">pronto</span>
+                </div>
+                <div class="card-body text-muted small">
+                    Cuando esté lista la app de contactos, acá vas a ver las personas vinculadas a esta empresa.
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <strong><i class="bi bi-clock-history text-success"></i> Interacciones</strong>
+                    <span class="badge bg-secondary">pronto</span>
+                </div>
+                <div class="card-body text-muted small">
+                    Historial de llamadas, reuniones y correos con esta empresa.
+                </div>
+            </div>
+        </div>
+
+        <!-- Metadatos / auditoría -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <strong><i class="bi bi-info-circle text-success"></i> Metadatos</strong>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm mb-0">
+                        <tbody>
+                            <tr>
+                                <th class="text-muted">Creada</th>
+                                <td>{{ company.created_at|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">Actualizada</th>
+                                <td>{{ company.updated_at|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">Creada por</th>
+                                <td>{{ company.created_by|default:"—" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
