@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Cola de revisión | AgroSafe Intelligence{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0"><i class="bi bi-inboxes text-success"></i> Cola de revisión</h1>
+        <a href="{% url 'scraping:import' %}" class="btn btn-success">
+            <i class="bi bi-cloud-upload"></i> Importar CSV/Excel
+        </a>
+    </div>
+
+    <!-- Tabs de estado -->
+    <ul class="nav nav-pills mb-3">
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == 'NEEDS_REVIEW' %}active{% endif %}"
+               href="?status=NEEDS_REVIEW">
+                Necesitan revisión <span class="badge bg-warning text-dark">{{ counts.NEEDS_REVIEW }}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == 'PENDING' %}active{% endif %}"
+               href="?status=PENDING">
+                Listas para promover <span class="badge bg-secondary">{{ counts.PENDING }}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == 'PROMOTED' %}active{% endif %}"
+               href="?status=PROMOTED">
+                Promovidas <span class="badge bg-success">{{ counts.PROMOTED }}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == 'REJECTED' %}active{% endif %}"
+               href="?status=REJECTED">
+                Rechazadas <span class="badge bg-danger">{{ counts.REJECTED }}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == 'ALL' %}active{% endif %}"
+               href="?status=ALL">
+                Todas <span class="badge bg-dark">{{ counts.ALL }}</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Razón social</th>
+                            <th>Fuente</th>
+                            <th>CUIT</th>
+                            <th>Localidad</th>
+                            <th>Notas</th>
+                            <th>Estado</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for raw in raw_companies %}
+                        <tr>
+                            <td><strong>{{ raw.business_name|default:"(sin nombre)" }}</strong></td>
+                            <td>{{ raw.get_source_display }}</td>
+                            <td>{{ raw.cuit|default:"—" }}</td>
+                            <td>{{ raw.city|default:"—" }}</td>
+                            <td class="small text-muted">{{ raw.notes|default:"—" }}</td>
+                            <td>
+                                {% if raw.status == "NEEDS_REVIEW" %}
+                                    <span class="badge bg-warning text-dark">Revisar</span>
+                                {% elif raw.status == "PENDING" %}
+                                    <span class="badge bg-secondary">Pendiente</span>
+                                {% elif raw.status == "PROMOTED" %}
+                                    <span class="badge bg-success">Promovida</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Rechazada</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                {% if raw.status == "PROMOTED" %}
+                                    <a href="{% url 'companies:company_detail' raw.promoted_company.company_uuid %}" class="btn btn-sm btn-outline-success">
+                                        Ver empresa
+                                    </a>
+                                {% elif raw.status == "REJECTED" %}
+                                    <span class="text-muted small">—</span>
+                                {% else %}
+                                    <a href="{% url 'scraping:raw_company_edit' raw.pk %}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="post" action="{% url 'scraping:raw_company_promote' raw.pk %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <i class="bi bi-check-lg"></i> Promover
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{% url 'scraping:raw_company_reject' raw.pk %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                No hay registros en este estado.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

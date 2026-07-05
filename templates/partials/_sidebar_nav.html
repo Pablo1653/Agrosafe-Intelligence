@@ -44,9 +44,8 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
-            <i class="bi bi-globe"></i> Scraping
-            <span class="badge bg-secondary float-end">pronto</span>
+    <a class="nav-link {% if 'scraping' in request.path %}active{% endif %}" href="{% url 'scraping:raw_company_list' %}">
+        <i class="bi bi-globe"></i> Scraping
         </a>
     </li>
 </ul>
