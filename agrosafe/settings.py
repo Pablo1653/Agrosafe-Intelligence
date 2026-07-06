@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.companies',
     'apps.scraping',
+    'apps.interactions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

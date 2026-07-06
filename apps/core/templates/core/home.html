@@ -3,16 +3,171 @@
 {% block title %}Inicio | AgroSafe Intelligence{% endblock %}
 
 {% block content %}
-    <h1 class="h3 mb-4">Bienvenido a AgroSafe Intelligence</h1>
+    <h1 class="h3 mb-4">Inicio</h1>
+
+    <!-- Resumen rápido -->
+    <div class="row g-3 mb-3">
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center h-100">
+                <div class="card-body">
+                    <div class="h2 mb-0 text-success">{{ total_active_companies }}</div>
+                    <div class="text-muted small">Empresas activas</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center h-100">
+                <div class="card-body">
+                    <div class="h2 mb-0 {% if pending_followups_count > 0 %}text-danger{% else %}text-success{% endif %}">
+                        {{ pending_followups_count }}
+                    </div>
+                    <div class="text-muted small">Seguimientos para hoy</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center h-100">
+                <div class="card-body">
+                    <div class="h2 mb-0 text-warning">{{ companies_never_contacted_count }}</div>
+                    <div class="text-muted small">Sin contactar todavía</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center h-100">
+                <div class="card-body">
+                    <div class="h2 mb-0 text-info">{{ scraping_counts.needs_review|add:scraping_counts.pending }}</div>
+                    <div class="text-muted small">Pendientes en scraping</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row g-3">
-        <div class="col-md-4">
+        <!-- Seguimientos vencidos/hoy -->
+        <div class="col-lg-6">
             <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <strong><i class="bi bi-alarm text-danger"></i> Seguimientos para hoy o vencidos</strong>
+                </div>
+                <div class="card-body p-0">
+                    {% if pending_followups %}
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                {% for interaction in pending_followups %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'companies:company_detail' interaction.company.company_uuid %}">
+                                            {{ interaction.company.business_name }}
+                                        </a>
+                                    </td>
+                                    <td class="text-muted small">{{ interaction.get_interaction_type_display }}</td>
+                                    <td class="text-end">
+                                        {% if interaction.follow_up_date < today %}
+                                            <span class="badge bg-danger">Vencido {{ interaction.follow_up_date|date:"d/m" }}</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">Hoy</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-muted small p-3 mb-0">No tenés seguimientos pendientes. 🎉</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Empresas sin contactar -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <strong><i class="bi bi-telephone-x text-warning"></i> Empresas sin contactar</strong>
+                </div>
+                <div class="card-body p-0">
+                    {% if companies_never_contacted %}
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                {% for company in companies_never_contacted %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'companies:company_detail' company.company_uuid %}">
+                                            {{ company.business_name }}
+                                        </a>
+                                    </td>
+                                    <td class="text-muted small">{{ company.city|default:"—" }}</td>
+                                    <td class="text-end">
+                                        <a href="{% url 'interactions:interaction_create' company.company_uuid %}" class="btn btn-sm btn-outline-success">
+                                            Registrar contacto
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if companies_never_contacted_count > 10 %}
+                            <p class="text-muted small p-2 mb-0">Mostrando 10 de {{ companies_never_contacted_count }}.</p>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-muted small p-3 mb-0">Ya contactaste a todas las empresas activas.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Cola de scraping -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <strong><i class="bi bi-inboxes text-info"></i> Cola de scraping</strong>
+                </div>
                 <div class="card-body">
-                    <i class="bi bi-building fs-2 text-success"></i>
-                    <h5 class="card-title mt-2">Empresas</h5>
-                    <p class="card-text text-muted">Gestioná el registro de empresas del agro.</p>
-                    <a href="{% url 'companies:company_list' %}" class="btn btn-outline-success btn-sm">Ver empresas</a>
+                    {% if scraping_counts.needs_review or scraping_counts.pending %}
+                        <p class="mb-2">
+                            <span class="badge bg-warning text-dark">{{ scraping_counts.needs_review }}</span> necesitan revisión ·
+                            <span class="badge bg-secondary">{{ scraping_counts.pending }}</span> listas para promover
+                        </p>
+                        <a href="{% url 'scraping:raw_company_list' %}" class="btn btn-sm btn-outline-dark">
+                            Ir a la cola de revisión
+                        </a>
+                    {% else %}
+                        <p class="text-muted small mb-2">No hay nada pendiente de revisar.</p>
+                        <a href="{% url 'scraping:google_maps_search' %}" class="btn btn-sm btn-outline-success">
+                            Buscar empresas nuevas
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Actividad reciente -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <strong><i class="bi bi-clock-history text-success"></i> Actividad reciente</strong>
+                </div>
+                <div class="card-body p-0">
+                    {% if recent_interactions %}
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                {% for interaction in recent_interactions %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'companies:company_detail' interaction.company.company_uuid %}">
+                                            {{ interaction.company.business_name }}
+                                        </a>
+                                    </td>
+                                    <td class="text-muted small">{{ interaction.get_interaction_type_display }}</td>
+                                    <td class="text-muted small text-end">{{ interaction.date|date:"d/m H:i" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-muted small p-3 mb-0">Todavía no registraste ninguna interacción.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
