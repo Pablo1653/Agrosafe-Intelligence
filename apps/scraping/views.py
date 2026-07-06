@@ -1,12 +1,14 @@
 import csv
 import io
 
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
 from .models import RawCompany
-from .forms import RawCompanyImportForm, RawCompanyEditForm
+from .forms import RawCompanyImportForm, RawCompanyEditForm, GoogleMapsSearchForm
 from .services import clean_raw_company, validate_raw_company, promote_raw_company, reject_raw_company
+from .sources.google_places import search_google_places, GooglePlacesError
 
 try:
     import openpyxl
@@ -202,3 +204,50 @@ def raw_company_reject(request, pk):
     if next_url.startswith("/"):
         return redirect(next_url)
     return redirect("scraping:raw_company_list")
+
+
+def google_maps_search_view(request):
+    """
+    Busca empresas en Google Places por rubro + ciudad y las carga como
+    RawCompany (source=GOOGLE_MAPS), pasando por el mismo clean+validate
+    que usa la importación de CSV/Excel.
+    """
+    if request.method == "POST":
+        form = GoogleMapsSearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data["query"]
+            city = form.cleaned_data["city"]
+            max_results = form.cleaned_data["max_results"]
+            text_query = f"{query} en {city}, Argentina"
+
+            api_key = getattr(settings, "GOOGLE_PLACES_API_KEY", "")
+            try:
+                results = search_google_places(text_query, api_key, max_results=max_results)
+            except GooglePlacesError as exc:
+                messages.error(request, str(exc))
+                return render(request, "scraping/google_maps_search.html", {"form": form})
+
+            created_count = 0
+            for place in results:
+                raw = RawCompany.objects.create(
+                    source=RawCompany.Source.GOOGLE_MAPS,
+                    raw_data=place,
+                    business_name=place.get("business_name", ""),
+                    website=place.get("website", ""),
+                    city=place.get("city") or city,
+                    industry=query,
+                    created_by=request.user if request.user.is_authenticated else None,
+                )
+                clean_raw_company(raw)
+                validate_raw_company(raw)
+                created_count += 1
+
+            messages.success(
+                request,
+                f"Se encontraron {created_count} empresas para \"{query}\" en {city}."
+            )
+            return redirect("scraping:raw_company_list")
+    else:
+        form = GoogleMapsSearchForm()
+
+    return render(request, "scraping/google_maps_search.html", {"form": form})

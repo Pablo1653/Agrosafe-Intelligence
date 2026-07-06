@@ -2,6 +2,29 @@ from django import forms
 from .models import RawCompany
 
 
+class GoogleMapsSearchForm(forms.Form):
+    """
+    Búsqueda por texto libre + ciudad, para armar la textQuery que se le
+    manda a Google Places (ej. "acopio de granos" + "Rosario" ->
+    "acopio de granos en Rosario, Argentina").
+    """
+    query = forms.CharField(
+        label="Rubro o tipo de empresa",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Ej: acopio de granos"}),
+    )
+    city = forms.CharField(
+        label="Ciudad / zona",
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Ej: Rosario"}),
+    )
+    max_results = forms.IntegerField(
+        label="Cantidad máxima de resultados",
+        initial=20,
+        min_value=1,
+        max_value=20,
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
+    )
+
+
 class RawCompanyImportForm(forms.Form):
     """
     Accepts a CSV or Excel (.xlsx) file. Column names are matched

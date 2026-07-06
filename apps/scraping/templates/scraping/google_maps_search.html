@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Buscar en Google Maps | AgroSafe Intelligence{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0"><i class="bi bi-geo-alt text-success"></i> Buscar en Google Maps</h1>
+        <a href="{% url 'scraping:raw_company_list' %}" class="btn btn-outline-dark">
+            <i class="bi bi-list-check"></i> Ver cola de revisión
+        </a>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.query.label }}</label>
+                            {{ form.query }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.city.label }}</label>
+                            {{ form.city }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.max_results.label }}</label>
+                            {{ form.max_results }}
+                            <div class="form-text">Máximo 20 por búsqueda (límite de la API de Google).</div>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-search"></i> Buscar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm bg-light">
+                <div class="card-body">
+                    <h6><i class="bi bi-info-circle"></i> Cómo funciona</h6>
+                    <p class="text-muted small mb-2">
+                        Se busca en Google Maps algo como <em>"acopio de granos en Rosario, Argentina"</em>
+                        y cada resultado entra a la cola de revisión, igual que un CSV importado.
+                    </p>
+                    <p class="text-muted small mb-0">
+                        Google devuelve como máximo 20 resultados por búsqueda. Para más volumen,
+                        repetí la búsqueda variando la ciudad o el rubro (ej. "silos" y "acopio" por separado).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
