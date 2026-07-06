@@ -7,6 +7,26 @@ from .models import Interaction
 from .forms import InteractionForm
 
 
+def interaction_list(request):
+    """
+    Todas las interacciones registradas, sin importar la empresa.
+    Complementa el dashboard: acá se puede ver/buscar el historial
+    completo, no solo las últimas 8.
+    """
+    interactions = Interaction.objects.select_related("company").order_by("-date")
+
+    filtro = request.GET.get("filtro", "")
+    if filtro == "pendientes":
+        today = timezone.localdate()
+        interactions = interactions.filter(follow_up_date__isnull=False, follow_up_date__lte=today)
+
+    context = {
+        "interactions": interactions,
+        "filtro": filtro,
+    }
+    return render(request, "interactions/interaction_list.html", context)
+
+
 def interaction_create(request, company_uuid):
     """
     Crear una interacción para una empresa puntual. Se accede desde

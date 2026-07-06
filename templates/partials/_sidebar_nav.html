@@ -20,9 +20,8 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
+        <a class="nav-link {% if request.path == '/interacciones/' %}active{% endif %}" href="{% url 'interactions:interaction_list' %}">
             <i class="bi bi-clock-history"></i> Interacciones
-            <span class="badge bg-secondary float-end">pronto</span>
         </a>
     </li>
     <li class="nav-item">
@@ -44,8 +43,8 @@
         </a>
     </li>
     <li class="nav-item">
-    <a class="nav-link {% if 'scraping' in request.path %}active{% endif %}" href="{% url 'scraping:raw_company_list' %}">
-        <i class="bi bi-globe"></i> Scraping
+        <a class="nav-link {% if 'scraping' in request.path %}active{% endif %}" href="{% url 'scraping:raw_company_list' %}">
+            <i class="bi bi-globe"></i> Scraping
         </a>
     </li>
 </ul>
