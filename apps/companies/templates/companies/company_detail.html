@@ -11,9 +11,9 @@
         </ol>
     </nav>
 
-    <div class="d-flex justify-content-between align-items-start mb-4">
+    <div class="page-header align-items-start">
         <div>
-            <h1 class="h3 mb-1">{{ company.business_name }}</h1>
+            <h1 class="h3 mb-2">{{ company.business_name }}</h1>
             <div>
                 {% if company.status == "CLIENT" %}
                     <span class="badge bg-success">Cliente</span>
@@ -54,9 +54,9 @@
     <div class="row g-3">
         <!-- Datos generales -->
         <div class="col-lg-8">
-            <div class="card shadow-sm mb-3">
-                <div class="card-header bg-white">
-                    <strong><i class="bi bi-building text-success"></i> Datos generales</strong>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="bi bi-building text-success"></i> Datos generales
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-sm mb-0">
@@ -99,9 +99,9 @@
             </div>
 
             <!-- Placeholders para módulos relacionados (próximamente) -->
-            <div class="card shadow-sm mb-3">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <strong><i class="bi bi-person-lines-fill text-success"></i> Contactos</strong>
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-person-lines-fill text-success"></i> Contactos</span>
                     <span class="badge bg-secondary">pronto</span>
                 </div>
                 <div class="card-body text-muted small">
@@ -109,17 +109,18 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <strong><i class="bi bi-clock-history text-success"></i> Interacciones</strong>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-clock-history text-success"></i> Interacciones</span>
                     <a href="{% url 'interactions:interaction_create' company.company_uuid %}" class="btn btn-sm btn-success">
                         <i class="bi bi-plus-lg"></i> Registrar
                     </a>
                 </div>
                 <div class="card-body p-0">
                     {% if company.interactions.all %}
-                        <table class="table table-sm mb-0">
-                            <thead class="table-light">
+                        <div class="table-responsive">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
                                 <tr>
                                     <th>Fecha</th>
                                     <th>Tipo</th>
@@ -171,8 +172,12 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                        </div>
                     {% else %}
-                        <p class="text-muted small p-3 mb-0">Todavía no hay interacciones registradas con esta empresa.</p>
+                        <div class="empty-state">
+                            <i class="bi bi-chat-left-text"></i>
+                            Todavía no hay interacciones registradas con esta empresa.
+                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -180,9 +185,9 @@
 
         <!-- Metadatos / auditoría -->
         <div class="col-lg-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white">
-                    <strong><i class="bi bi-info-circle text-success"></i> Metadatos</strong>
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-info-circle text-success"></i> Metadatos
                 </div>
                 <div class="card-body p-0">
                     <table class="table table-sm mb-0">

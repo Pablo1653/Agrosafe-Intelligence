@@ -17,15 +17,17 @@
         </ol>
     </nav>
 
-    <h1 class="h3 mb-4">
-        {% if is_edit %}
-            <i class="bi bi-pencil text-success"></i> Editar empresa
-        {% else %}
-            <i class="bi bi-plus-lg text-success"></i> Nueva empresa
-        {% endif %}
-    </h1>
+    <div class="page-header">
+        <h1 class="h3">
+            {% if is_edit %}
+                <i class="bi bi-pencil"></i> Editar empresa
+            {% else %}
+                <i class="bi bi-plus-lg"></i> Nueva empresa
+            {% endif %}
+        </h1>
+    </div>
 
-    <div class="card shadow-sm">
+    <div class="card">
         <div class="card-body">
             <form method="post" novalidate>
                 {% csrf_token %}

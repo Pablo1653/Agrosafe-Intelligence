@@ -1,22 +1,14 @@
 {% load static %}
-<ul class="nav flex-column px-2">
+<ul class="nav flex-column">
+    <li class="sidebar-section-label">Principal</li>
     <li class="nav-item">
         <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
     </li>
-
     <li class="nav-item">
         <a class="nav-link {% if 'companies' in request.path %}active{% endif %}" href="{% url 'companies:company_list' %}">
             <i class="bi bi-building"></i> Empresas
-        </a>
-    </li>
-
-    <!-- Las siguientes apps todavía no tienen vistas/urls: quedan como placeholders -->
-    <li class="nav-item">
-        <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
-            <i class="bi bi-person-lines-fill"></i> Contactos
-            <span class="badge bg-secondary float-end">pronto</span>
         </a>
     </li>
     <li class="nav-item">
@@ -24,24 +16,34 @@
             <i class="bi bi-clock-history"></i> Interacciones
         </a>
     </li>
+
+    <li class="sidebar-section-label">Próximamente</li>
+    <li class="nav-item">
+        <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
+            <i class="bi bi-person-lines-fill"></i> Contactos
+            <span class="badge bg-secondary">pronto</span>
+        </a>
+    </li>
     <li class="nav-item">
         <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
             <i class="bi bi-clipboard-check"></i> Compliance
-            <span class="badge bg-secondary float-end">pronto</span>
+            <span class="badge bg-secondary">pronto</span>
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
             <i class="bi bi-file-earmark-text"></i> Documentos
-            <span class="badge bg-secondary float-end">pronto</span>
+            <span class="badge bg-secondary">pronto</span>
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
             <i class="bi bi-graph-up-arrow"></i> Inteligencia
-            <span class="badge bg-secondary float-end">pronto</span>
+            <span class="badge bg-secondary">pronto</span>
         </a>
     </li>
+
+    <li class="sidebar-section-label">Datos</li>
     <li class="nav-item">
         <a class="nav-link {% if 'scraping' in request.path %}active{% endif %}" href="{% url 'scraping:raw_company_list' %}">
             <i class="bi bi-globe"></i> Scraping
