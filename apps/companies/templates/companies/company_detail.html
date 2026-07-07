@@ -52,7 +52,7 @@
     </div>
 
     <div class="row g-3">
-        <!-- Datos generales -->
+        <!-- General Data -->
         <div class="col-lg-8">
             <div class="card mb-3">
                 <div class="card-header">
@@ -84,7 +84,22 @@
                                         —
                                     {% endif %}
                                 </td>
+
+                                 <td>
+                                    {% if company.email %}
+                                        <a href="mailto:{{ company.email }}">
+                                            {{ company.email }} <i class="bi bi-envelope"></i>
+                                        </a>
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+
+
                             </tr>
+
+
+
                             <tr>
                                 <th class="text-muted">Rubro</th>
                                 <td>{{ company.industry|default:"—" }}</td>

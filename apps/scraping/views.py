@@ -160,10 +160,10 @@ def raw_company_list(request):
 
 def raw_company_edit(request, pk):
     """
-    Manual completion of a record before promoting it — e.g. the
-    company a friend recommended, with missing fields filled in by hand.
-    Re-runs validation after saving, so it moves out of NEEDS_REVIEW
-    if the fix resolved the issue.
+    Manually filling out a record before approving it—for example, the
+    company recommended to me by a friend, with the missing fields filled in by hand.
+    The validation runs again after saving, so it exits the NEEDS_REVIEW status
+    if the correction has resolved the issue.
     """
     raw = get_object_or_404(RawCompany, pk=pk)
 
@@ -208,9 +208,9 @@ def raw_company_reject(request, pk):
 
 def google_maps_search_view(request):
     """
-    Busca empresas en Google Places por rubro + ciudad y las carga como
-    RawCompany (source=GOOGLE_MAPS), pasando por el mismo clean+validate
-    que usa la importación de CSV/Excel.
+    Search for businesses on Google Places by category + city and import them as
+    RawCompany (source=GOOGLE_MAPS), running them through the same clean+validate
+    process used for CSV/Excel imports.
     """
     if request.method == "POST":
         form = GoogleMapsSearchForm(request.POST)

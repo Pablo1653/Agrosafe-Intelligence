@@ -5,12 +5,12 @@ from apps.companies.models import Company
 
 class Interaction(models.Model):
     """
-    Registro de una actividad de contacto con una empresa: una llamada,
-    un email, una visita, etc.
+    Recording a contact activity with a company: a phone call,
+    an email, a visit, etc.
 
-    Por ahora apunta directo a Company. Cuando exista la app `contacts`,
-    se puede agregar un ForeignKey real a Contact sin perder este
-    historial: contact_name queda como el dato de respaldo/legado.
+    For now, it points directly to Company. Once the `contacts` app is available,
+    you can add a real ForeignKey to Contact without losing this
+    history: `contact_name` remains as the backup/legacy data.
     """
 
     class InteractionType(models.TextChoices):
@@ -35,8 +35,8 @@ class Interaction(models.Model):
     )
 
     """
-    Nombre de la persona con la que se habló, como texto libre por
-    ahora (no hay app de contactos todavía).
+   Name of the person you spoke with, as free text for
+    now (there is no contacts app yet).
     """
     contact_name = models.CharField(
         max_length=150,
@@ -63,7 +63,7 @@ class Interaction(models.Model):
     )
 
     """
-    Si hay que retomar contacto en el futuro, cuándo.
+    If there is a need to follow up on the contact in the future, when.
     """
     follow_up_date = models.DateField(
         null=True,

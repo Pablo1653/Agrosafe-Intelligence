@@ -8,13 +8,15 @@ from apps.scraping.models import RawCompany
 
 def home(request):
     """
-    Dashboard de arranque: qué hay que hacer hoy, no solo un saludo.
+    Startup Dashboard: Displays an overview of the current status, including pending interactions, companies that were never contacted, and a summary of the scraping results.    
+    
     """
     today = timezone.localdate()
 
-    # Para cada empresa, nos interesa solo su interacción MÁS RECIENTE:
-    # si ya la volviste a llamar, no tiene sentido seguir mostrando el
-    # seguimiento de una interacción vieja como "vencido".
+   # For each company, we're only interested in its MOST RECENT interaction:
+    # If you've already called them back, there's no point in continuing to show
+    # the follow-up for an old interaction as “overdue.”
+    
     latest_by_company = {}
     for interaction in Interaction.objects.select_related("company").order_by("date"):
         latest_by_company[interaction.company_id] = interaction

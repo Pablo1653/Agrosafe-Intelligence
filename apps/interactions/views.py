@@ -1,3 +1,5 @@
+from ast import Delete
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
@@ -9,9 +11,9 @@ from .forms import InteractionForm
 
 def interaction_list(request):
     """
-    Todas las interacciones registradas, sin importar la empresa.
-    Complementa el dashboard: acá se puede ver/buscar el historial
-    completo, no solo las últimas 8.
+    All recorded interactions, regardless of the company.
+    Complements the dashboard: here you can view/search the
+    complete history, not just the last 8.
     """
     interactions = Interaction.objects.select_related("company").order_by("-date")
 
@@ -29,8 +31,8 @@ def interaction_list(request):
 
 def interaction_create(request, company_uuid):
     """
-    Crear una interacción para una empresa puntual. Se accede desde
-    la ficha de detalle de esa empresa.
+    Create an interaction for a specific company. You can access this from
+    that company's detail page.
     """
     company = get_object_or_404(Company, company_uuid=company_uuid)
 
@@ -56,7 +58,7 @@ def interaction_create(request, company_uuid):
 
 def interaction_update(request, pk):
     """
-    Editar una interacción existente.
+    Edit an existing interaction.
     """
     interaction = get_object_or_404(Interaction, pk=pk)
     company = interaction.company
@@ -81,10 +83,11 @@ def interaction_update(request, pk):
 
 def interaction_delete(request, pk):
     """
-    Eliminar una interacción (a diferencia de Company, acá sí se borra
-    de verdad: es un registro de actividad, no una entidad de negocio
-    que valga la pena conservar inactiva).
+    Delete an interaction (unlike “Company,” here it is actually deleted:
+    it is an activity record, not a business entity
+    worth keeping even if it is inactive).
     """
+
     interaction = get_object_or_404(Interaction, pk=pk)
     company_uuid = interaction.company.company_uuid
 

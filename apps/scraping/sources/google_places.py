@@ -1,17 +1,17 @@
 """
-Conector para Google Places API (New) - Text Search.
+Google Places API Connector (New) - Text Search.
 
-Documentación oficial: https://developers.google.com/maps/documentation/places/web-service/text-search
+Official documentation: https://developers.google.com/maps/documentation/places/web-service/text-search
 
-No usa la API "legacy" (maps.googleapis.com/.../textsearch/json), que Google
-está migrando gradualmente hacia esta versión nueva basada en POST + JSON.
+It does not use the “legacy” API (maps.googleapis.com/.../textsearch/json), which Google
+is gradually migrating to this new version based on POST + JSON.
 """
 import requests
 
 PLACES_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText"
 
-# Solo pedimos los campos que realmente usamos: pedir de más sale más caro
-# (Google cobra según los campos incluidos en el FieldMask).
+# We only request the fields we actually use: requesting more than we need costs more
+# (Google charges based on the fields included in the FieldMask).
 FIELD_MASK = ",".join([
     "places.id",
     "places.displayName",
@@ -24,16 +24,16 @@ FIELD_MASK = ",".join([
 
 
 class GooglePlacesError(Exception):
-    """Cualquier problema al consultar Google Places (key inválida, sin
-    conexión, respuesta de error, etc.) se reporta con este tipo, para que
-    la vista pueda mostrar un mensaje claro sin romper la página."""
+    """Any issues when accessing Google Places (invalid key, no
+    connection, error response, etc.) should be reported using this type, so that
+    the view can display a clear message without breaking the page"""
     pass
 
 
 def _extract_city(address_components):
     """
-    Google no devuelve una 'ciudad' directa: hay que buscarla dentro de
-    addressComponents, en el componente cuyo tipo es 'locality'.
+    Google doesn't return a “city” directly: you have to look for it within
+    addressComponents, in the component whose type is “locality.”
     """
     for component in address_components or []:
         if "locality" in component.get("types", []):
@@ -43,13 +43,13 @@ def _extract_city(address_components):
 
 def search_google_places(text_query: str, api_key: str, max_results: int = 20) -> list[dict]:
     """
-    Busca lugares por texto libre (ej. "acopio de granos en Rosario, Argentina")
-    y devuelve una lista de diccionarios ya normalizados, listos para crear
+    Searches for locations using free-text queries (e.g., “grain storage in Rosario, Argentina”)
+    and returns a list of pre-normalized dictionaries, ready to create
     RawCompany.
 
-    Nota: Text Search (New) devuelve como máximo 20 resultados por llamada.
-    Para más volumen, hay que variar la búsqueda (por localidad, por
-    partido, etc.) y correr varias búsquedas en vez de una sola.
+    Note: Text Search (New) returns a maximum of 20 results per call.
+    For a larger volume of results, vary your search criteria (by city, by
+    county, etc.) and run multiple searches instead of a single one.
     """
     if not api_key:
         raise GooglePlacesError(

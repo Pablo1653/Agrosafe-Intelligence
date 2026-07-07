@@ -74,6 +74,14 @@ class Company(models.Model):
         blank=True,
         verbose_name="Sitio Web"
     )
+    
+    """
+    Main contact email for the company.
+    """
+    email = models.EmailField(
+        blank=True,
+        verbose_name="Correo Electrónico"
+    )
 
     """
     Main economic activity or business sector.

@@ -4,9 +4,9 @@ from .models import RawCompany
 
 class GoogleMapsSearchForm(forms.Form):
     """
-    Búsqueda por texto libre + ciudad, para armar la textQuery que se le
-    manda a Google Places (ej. "acopio de granos" + "Rosario" ->
-    "acopio de granos en Rosario, Argentina").
+    Search by free text + city, to build the textQuery that is
+    sent to Google Places (e.g., “grain storage” + “Rosario” ->
+    “grain storage in Rosario, Argentina”).
     """
     query = forms.CharField(
         label="Rubro o tipo de empresa",

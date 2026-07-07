@@ -21,7 +21,7 @@ def _normalize_cuit(value: str) -> str:
 
 def clean_raw_company(raw: RawCompany) -> RawCompany:
     """
-    'Limpieza' step: normalizes formatting only. Does not decide
+    'Clean' step: normalizes formatting only. Does not decide
     whether the record is valid or a duplicate — that's validate_raw_company.
     """
     raw.business_name = _collapse_spaces(raw.business_name)
@@ -41,7 +41,7 @@ def clean_raw_company(raw: RawCompany) -> RawCompany:
 
 def validate_raw_company(raw: RawCompany) -> str:
     """
-    'Validación' step: decides what to do with a cleaned record.
+    'validation' step: decides what to do with a cleaned record.
 
     - REJECTED: missing the bare minimum to be useful.
     - NEEDS_REVIEW: malformed CUIT, or looks like a duplicate of an
