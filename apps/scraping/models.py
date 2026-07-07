@@ -52,6 +52,7 @@ class RawCompany(models.Model):
     cuit = models.CharField(max_length=13, blank=True, verbose_name="CUIT")
     website = models.CharField(max_length=255, blank=True, verbose_name="Sitio Web")
     email = models.CharField(max_length=255, blank=True, verbose_name="Correo Electrónico")
+    phone = models.CharField(max_length=30, blank=True, verbose_name="Teléfono")
     industry = models.CharField(max_length=150, blank=True, verbose_name="Rubro")
     city = models.CharField(max_length=120, blank=True, verbose_name="Localidad")
 

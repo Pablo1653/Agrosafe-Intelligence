@@ -84,6 +84,15 @@ class Company(models.Model):
     )
 
     """
+    Main contact phone number for the company (used to call potential clients).
+    """
+    phone = models.CharField(
+        max_length=30,
+        blank=True,
+        verbose_name="Teléfono"
+    )
+
+    """
     Main economic activity or business sector.
     """
     industry = models.CharField(

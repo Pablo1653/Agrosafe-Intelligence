@@ -59,6 +59,7 @@
                             <th>Fuente</th>
                             <th>CUIT</th>
                             <th>Localidad</th>
+                            <th>Sitio web</th>
                             <th>Correo electrónico</th>
                             <th>Notas</th>
                             <th>Estado</th>
@@ -72,6 +73,15 @@
                             <td>{{ raw.get_source_display }}</td>
                             <td>{{ raw.cuit|default:"—" }}</td>
                             <td>{{ raw.city|default:"—" }}</td>
+                            <td>
+                                {% if raw.website %}
+                                    <a href="{{ raw.website }}" target="_blank" rel="noopener">
+                                        <i class="bi bi-box-arrow-up-right"></i> Visitar
+                                    </a>
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
                             <td>{{ raw.email|default:"—" }}</td>
                             <td class="small text-muted">{{ raw.notes|default:"—" }}</td>
                             <td>
@@ -115,7 +125,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="8">
+                            <td colspan="9">
                                 <div class="empty-state">
                                     <i class="bi bi-inbox"></i>
                                     No hay registros en este estado.

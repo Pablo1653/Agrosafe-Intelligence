@@ -46,7 +46,7 @@ class RawCompanyEditForm(forms.ModelForm):
 
     class Meta:
         model = RawCompany
-        fields = ["business_name", "trade_name", "cuit", "website", "industry", "city", "email"]
+        fields = ["business_name", "trade_name", "cuit", "industry", "website", "email", "city"]
         widgets = {
             "business_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Razón social"}),
             "trade_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Nombre comercial"}),
