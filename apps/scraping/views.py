@@ -23,9 +23,11 @@ HEADER_ALIASES = {
     "trade_name": ["trade_name", "nombre_comercial", "nombre comercial"],
     "cuit": ["cuit"],
     "website": ["website", "sitio_web", "sitio web", "web"],
+    "phone": ["phone","telefono","teléfono","telefono_principal","tel","celular","mobile","whatsapp",],
     "industry": ["industry", "rubro", "actividad"],
     "city": ["city", "localidad", "ciudad"],
     "email": ["email", "mail", "correo", "correo_electronico", "correo electrónico", "e-mail"],
+    
 }
 
 
@@ -118,6 +120,7 @@ def import_view(request):
                     industry=values.get("industry", ""),
                     city=values.get("city", ""),
                     email=values.get("email", ""),
+                    phone=values.get("phone", ""),
                     created_by=request.user if request.user.is_authenticated else None,
                 )
                 clean_raw_company(raw)

@@ -20,6 +20,23 @@ def _normalize_cuit(value: str) -> str:
         return f"{digits[0:2]}-{digits[2:10]}-{digits[10]}"
     return digits
 
+def _normalize_phone(value: str) -> str:
+    """
+    Normalize phone numbers preserving digits and an optional leading '+'.
+    """
+
+    value = _collapse_spaces(value)
+
+    if not value:
+        return ""
+
+    value = value.replace("(", "")
+    value = value.replace(")", "")
+    value = value.replace("-", "")
+    value = value.replace(".", "")
+    value = value.replace(" ", "")
+
+    return value
 
 def clean_raw_company(raw: RawCompany) -> RawCompany:
     """
@@ -38,6 +55,7 @@ def clean_raw_company(raw: RawCompany) -> RawCompany:
     raw.website = website
 
     raw.email = _collapse_spaces(raw.email).lower()
+    raw.phone = _normalize_phone(raw.phone)
 
     raw.save()
     return raw
@@ -107,7 +125,7 @@ def promote_raw_company(raw: RawCompany, user=None) -> Company:
 
     if existing:
         changed_fields = []
-        for field in ["trade_name", "website", "industry", "city", "email"]:
+        for field in ["trade_name", "website", "industry", "city", "email", "phone"]:
             raw_value = getattr(raw, field)
             if raw_value and not getattr(existing, field):
                 setattr(existing, field, raw_value)
@@ -124,6 +142,7 @@ def promote_raw_company(raw: RawCompany, user=None) -> Company:
             industry=raw.industry,
             city=raw.city,
             email=raw.email,
+            phone=raw.phone,
             created_by=user if (user and user.is_authenticated) else None,
         )
 

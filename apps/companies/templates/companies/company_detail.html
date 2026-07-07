@@ -95,6 +95,15 @@
                                     {% endif %}
                                 </td>
 
+                                <td>
+                                    {% if company.phone %}
+                                        <a href="tel:{{ company.phone }}">
+                                            {{ company.phone }} <i class="bi bi-telephone"></i>
+                                        </a>
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>   
 
                             </tr>
 
