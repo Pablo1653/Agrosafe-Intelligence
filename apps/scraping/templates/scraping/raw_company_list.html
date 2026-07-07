@@ -59,6 +59,7 @@
                             <th>Fuente</th>
                             <th>CUIT</th>
                             <th>Localidad</th>
+                            <th>Correo electrónico</th>
                             <th>Notas</th>
                             <th>Estado</th>
                             <th class="text-end">Acciones</th>
@@ -71,6 +72,7 @@
                             <td>{{ raw.get_source_display }}</td>
                             <td>{{ raw.cuit|default:"—" }}</td>
                             <td>{{ raw.city|default:"—" }}</td>
+                            <td>{{ raw.email|default:"—" }}</td>
                             <td class="small text-muted">{{ raw.notes|default:"—" }}</td>
                             <td>
                                 {% if raw.status == "NEEDS_REVIEW" %}
@@ -113,7 +115,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="7">
+                            <td colspan="8">
                                 <div class="empty-state">
                                     <i class="bi bi-inbox"></i>
                                     No hay registros en este estado.

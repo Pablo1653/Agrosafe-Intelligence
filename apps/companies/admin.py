@@ -10,6 +10,7 @@ class CompanyAdmin(admin.ModelAdmin):
         "trade_name",
         "city",
         "industry",
+        "email",
         "status",
     )
 
@@ -17,6 +18,7 @@ class CompanyAdmin(admin.ModelAdmin):
         "business_name",
         "trade_name",
         "cuit",
+        "email",
     )
 
     list_filter = (

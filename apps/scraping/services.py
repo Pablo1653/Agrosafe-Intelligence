@@ -2,6 +2,8 @@ import re
 from apps.companies.models import Company
 from .models import RawCompany
 
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
 
 def _collapse_spaces(value: str) -> str:
     return " ".join((value or "").split()).strip()
@@ -35,6 +37,8 @@ def clean_raw_company(raw: RawCompany) -> RawCompany:
         website = f"https://{website}"
     raw.website = website
 
+    raw.email = _collapse_spaces(raw.email).lower()
+
     raw.save()
     return raw
 
@@ -44,8 +48,8 @@ def validate_raw_company(raw: RawCompany) -> str:
     'validation' step: decides what to do with a cleaned record.
 
     - REJECTED: missing the bare minimum to be useful.
-    - NEEDS_REVIEW: malformed CUIT, or looks like a duplicate of an
-      existing Company. Pablo has to look at it manually.
+    - NEEDS_REVIEW: malformed CUIT, malformed email, or looks like a
+      duplicate of an existing Company. Pablo has to look at it manually.
     - PENDING: looks fine, ready to be promoted with one click.
     """
     if not raw.business_name and not raw.cuit:
@@ -57,6 +61,12 @@ def validate_raw_company(raw: RawCompany) -> str:
     if raw.cuit and len(re.sub(r"\D", "", raw.cuit)) != 11:
         raw.status = RawCompany.Status.NEEDS_REVIEW
         raw.notes = f"CUIT con formato inválido: \"{raw.cuit}\"."
+        raw.save(update_fields=["status", "notes", "updated_at"])
+        return raw.status
+
+    if raw.email and not EMAIL_RE.match(raw.email):
+        raw.status = RawCompany.Status.NEEDS_REVIEW
+        raw.notes = f"Email con formato inválido: \"{raw.email}\"."
         raw.save(update_fields=["status", "notes", "updated_at"])
         return raw.status
 
@@ -97,7 +107,7 @@ def promote_raw_company(raw: RawCompany, user=None) -> Company:
 
     if existing:
         changed_fields = []
-        for field in ["trade_name", "website", "industry", "city"]:
+        for field in ["trade_name", "website", "industry", "city", "email"]:
             raw_value = getattr(raw, field)
             if raw_value and not getattr(existing, field):
                 setattr(existing, field, raw_value)
@@ -113,6 +123,7 @@ def promote_raw_company(raw: RawCompany, user=None) -> Company:
             website=raw.website,
             industry=raw.industry,
             city=raw.city,
+            email=raw.email,
             created_by=user if (user and user.is_authenticated) else None,
         )
 

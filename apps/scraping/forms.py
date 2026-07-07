@@ -5,8 +5,8 @@ from .models import RawCompany
 class GoogleMapsSearchForm(forms.Form):
     """
     Search by free text + city, to build the textQuery that is
-    sent to Google Places (e.g., “grain storage” + “Rosario” ->
-    “grain storage in Rosario, Argentina”).
+    sent to Google Places (e.g., "grain storage" + "Rosario" ->
+    "grain storage in Rosario, Argentina").
     """
     query = forms.CharField(
         label="Rubro o tipo de empresa",
@@ -46,7 +46,7 @@ class RawCompanyEditForm(forms.ModelForm):
 
     class Meta:
         model = RawCompany
-        fields = ["business_name", "trade_name", "cuit", "website", "industry", "city"]
+        fields = ["business_name", "trade_name", "cuit", "website", "industry", "city", "email"]
         widgets = {
             "business_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Razón social"}),
             "trade_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Nombre comercial"}),
@@ -54,4 +54,5 @@ class RawCompanyEditForm(forms.ModelForm):
             "website": forms.TextInput(attrs={"class": "form-control", "placeholder": "https://..."}),
             "industry": forms.TextInput(attrs={"class": "form-control", "placeholder": "Rubro"}),
             "city": forms.TextInput(attrs={"class": "form-control", "placeholder": "Localidad"}),
+            "email": forms.TextInput(attrs={"class": "form-control", "placeholder": "contacto@empresa.com"}),
         }
