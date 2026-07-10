@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>{{ contact.full_name }}</h2>
+
+<hr>
+
+<p><strong>Empresa:</strong> {{ contact.company }}</p>
+
+<p><strong>Cargo:</strong> {{ contact.get_position_display }}</p>
+
+<p><strong>Email:</strong> {{ contact.email }}</p>
+
+<p><strong>Celular:</strong> {{ contact.mobile }}</p>
+
+<p><strong>LinkedIn:</strong> {{ contact.linkedin }}</p>
+
+<p><strong>Notas:</strong></p>
+
+<p>{{ contact.notes }}</p>
+
+<a class="btn btn-primary"
+href="{% url 'contacts:contact_update' contact.contact_uuid %}">
+
+Editar
+
+</a>
+
+{% endblock %}

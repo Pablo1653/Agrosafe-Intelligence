@@ -43,6 +43,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'apps.core',
     'apps.companies',
+    'apps.contacts',
     'apps.scraping',
     'apps.interactions',
     'django.contrib.admin',

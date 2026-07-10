@@ -17,13 +17,16 @@
         </a>
     </li>
 
+     <li class="nav-item">
+    <a class="nav-link {% if 'contacts' in request.path %}active{% endif %}"
+       href="{% url 'contacts:contact_list' %}">
+        <i class="bi bi-person-lines-fill"></i> Contactos
+    </a>
+</li>
+
     <li class="sidebar-section-label">Próximamente</li>
-    <li class="nav-item">
-        <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
-            <i class="bi bi-person-lines-fill"></i> Contactos
-            <span class="badge bg-secondary">pronto</span>
-        </a>
-    </li>
+
+  
     <li class="nav-item">
         <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
             <i class="bi bi-clipboard-check"></i> Compliance

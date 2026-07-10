@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block content %}
+
+<h2>
+
+{% if is_edit %}
+
+Editar contacto
+
+{% else %}
+
+Nuevo contacto
+
+{% endif %}
+
+</h2>
+
+<form method="post">
+
+{% csrf_token %}
+
+{{ form.as_p }}
+
+<button class="btn btn-success">
+
+Guardar
+
+</button>
+
+</form>
+
+{% endblock %}

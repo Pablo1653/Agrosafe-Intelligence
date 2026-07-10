@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Contactos{% endblock %}
+
+{% block content %}
+
+<h2>Contactos</h2>
+
+<a class="btn btn-success mb-3"
+href="{% url 'contacts:contact_create' %}">
+Nuevo contacto
+</a>
+
+<table class="table table-striped">
+
+<thead>
+
+<tr>
+
+<th>Empresa</th>
+
+<th>Nombre</th>
+
+<th>Cargo</th>
+
+<th>Email</th>
+
+<th>Celular</th>
+
+<th>Notas</th> 
+
+<th></th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for contact in contacts %}
+
+<tr>
+
+<td>{{ contact.company.business_name }}</td>
+
+<td>{{ contact.full_name }}</td>
+
+<td>{{ contact.get_position_display }}</td>
+
+<td>{{ contact.email }}</td>
+
+<td>{{ contact.mobile }}</td>
+
+<td>{{ contact.notes }}</td>
+
+<td>
+
+<a class="btn btn-sm btn-primary"
+href="{% url 'contacts:contact_detail' contact.contact_uuid %}">
+
+Ver
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}
