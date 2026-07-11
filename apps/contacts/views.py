@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ContactForm
+from .services import set_primary_contact
 from .models import Contact
 
 
@@ -50,14 +51,17 @@ def contact_create(request):
 
         if form.is_valid():
 
-            contact = form.save()
+           contact = form.save()
 
-            messages.success(
+        if contact.is_primary:
+                set_primary_contact(contact)
+
+                messages.success(
                 request,
                 "Contacto creado correctamente."
-            )
+             )
 
-            return redirect(
+        return redirect(
                 "contacts:contact_detail",
                 contact_uuid=contact.contact_uuid,
             )
@@ -86,16 +90,14 @@ def contact_update(request, contact_uuid):
 
         if form.is_valid():
 
-            form.save()
+            contact = form.save()
+
+            if contact.is_primary:
+                set_primary_contact(contact)
 
             messages.success(
                 request,
                 "Contacto actualizado."
-            )
-
-            return redirect(
-                "contacts:contact_detail",
-                contact_uuid=contact.contact_uuid,
             )
 
     else:

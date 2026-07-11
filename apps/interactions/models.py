@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+import uuid
 from apps.companies.models import Company
 
 
@@ -26,6 +27,12 @@ class Interaction(models.Model):
         NEUTRAL = "NEUTRAL", "Neutro"
         NEGATIVE = "NEGATIVE", "Negativo"
         NO_RESPONSE = "NO_RESPONSE", "Sin respuesta"
+
+    interaction_uuid = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+    )
 
     company = models.ForeignKey(
         Company,

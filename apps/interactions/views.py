@@ -1,5 +1,3 @@
-from ast import Delete
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
@@ -56,11 +54,11 @@ def interaction_create(request, company_uuid):
     return render(request, "interactions/interaction_form.html", context)
 
 
-def interaction_update(request, pk):
+def interaction_update(request, interaction_uuid):
     """
     Edit an existing interaction.
     """
-    interaction = get_object_or_404(Interaction, pk=pk)
+    interaction = get_object_or_404(Interaction, interaction_uuid=interaction_uuid)
     company = interaction.company
 
     if request.method == "POST":
@@ -81,14 +79,14 @@ def interaction_update(request, pk):
     return render(request, "interactions/interaction_form.html", context)
 
 
-def interaction_delete(request, pk):
+def interaction_delete(request, interaction_uuid):
     """
     Delete an interaction (unlike “Company,” here it is actually deleted:
     it is an activity record, not a business entity
     worth keeping even if it is inactive).
     """
 
-    interaction = get_object_or_404(Interaction, pk=pk)
+    interaction = get_object_or_404(Interaction, interaction_uuid=interaction_uuid)
     company_uuid = interaction.company.company_uuid
 
     if request.method == "POST":
