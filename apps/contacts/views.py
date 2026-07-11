@@ -51,17 +51,17 @@ def contact_create(request):
 
         if form.is_valid():
 
-           contact = form.save()
+            contact = form.save()
 
-        if contact.is_primary:
+            if contact.is_primary:
                 set_primary_contact(contact)
 
-                messages.success(
+            messages.success(
                 request,
                 "Contacto creado correctamente."
-             )
+            )
 
-        return redirect(
+            return redirect(
                 "contacts:contact_detail",
                 contact_uuid=contact.contact_uuid,
             )
@@ -78,7 +78,6 @@ def contact_create(request):
             "is_edit": False,
         },
     )
-
 
 def contact_update(request, contact_uuid):
 
@@ -98,6 +97,11 @@ def contact_update(request, contact_uuid):
             messages.success(
                 request,
                 "Contacto actualizado."
+            )
+
+            return redirect(
+                "contacts:contact_detail",
+                contact_uuid=contact.contact_uuid,
             )
 
     else:
