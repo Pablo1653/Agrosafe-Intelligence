@@ -175,10 +175,10 @@
                                     </td>
                                     <td>{{ interaction.follow_up_date|date:"d/m/Y"|default:"—" }}</td>
                                     <td class="text-end">
-                                        <a href="{% url 'interactions:interaction_update' interaction.pk %}" class="btn btn-sm btn-outline-secondary">
+                                        <a href="{% url 'interactions:interaction_update' interaction.interaction_uuid %}" class="btn btn-sm btn-outline-secondary">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <form method="post" action="{% url 'interactions:interaction_delete' interaction.pk %}" class="d-inline"
+                                        <form method="post" action="{% url 'interactions:interaction_delete' interaction.interaction_uuid %}" class="d-inline"
                                               onsubmit="return confirm('¿Eliminar esta interacción?');">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-sm btn-outline-danger">
