@@ -68,7 +68,7 @@
     <div class="row">
 
         <!-- ===== SIDEBAR (desktop) ===== -->
-        <aside class="col-lg-2 d-none d-lg-block sidebar">
+        <aside class="d-none d-lg-block sidebar sidebar-collapsible">
             {% include "partials/_sidebar_nav.html" %}
         </aside>
 
@@ -84,7 +84,7 @@
         </div>
 
         <!-- ===== MAIN CONTENT ===== -->
-        <main class="col-lg-10">
+        <main class="content-area">
 
             {% if messages %}
                 {% for message in messages %}

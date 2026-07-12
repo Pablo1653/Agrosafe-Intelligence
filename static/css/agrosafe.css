@@ -585,3 +585,45 @@ main {
 .table-responsive::-webkit-scrollbar-thumb:hover {
     background: var(--agro-accent-soft);
 }
+
+/* ----- Tabla que nunca se desborda del contenedor ----- */
+.table-fit {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.table-fit th,
+.table-fit td {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+}
+
+
+/* ----- Sidebar colapsable (hover, sin JS) ----- */
+.sidebar-collapsible {
+    flex: 0 0 auto;
+    width: 4.75rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
+    transition: width 0.2s ease;
+}
+
+.sidebar-collapsible:hover {
+    width: 15rem;
+}
+
+.sidebar-collapsible .sidebar-label {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.sidebar-collapsible:hover .sidebar-label {
+    opacity: 1;
+}
+
+.content-area {
+    flex: 1 1 0%;
+    min-width: 0;
+}

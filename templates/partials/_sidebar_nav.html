@@ -1,55 +1,52 @@
 {% load static %}
 <ul class="nav flex-column">
-    <li class="sidebar-section-label">Principal</li>
+    <li class="sidebar-section-label"><span class="sidebar-label">Principal</span></li>
     <li class="nav-item">
         <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
-            <i class="bi bi-speedometer2"></i> Dashboard
+            <i class="bi bi-speedometer2"></i> <span class="sidebar-label">Dashboard</span>
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if 'companies' in request.path %}active{% endif %}" href="{% url 'companies:company_list' %}">
-            <i class="bi bi-building"></i> Empresas
+            <i class="bi bi-building"></i> <span class="sidebar-label">Empresas</span>
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if request.path == '/interacciones/' %}active{% endif %}" href="{% url 'interactions:interaction_list' %}">
-            <i class="bi bi-clock-history"></i> Interacciones
+            <i class="bi bi-clock-history"></i> <span class="sidebar-label">Interacciones</span>
         </a>
     </li>
 
      <li class="nav-item">
     <a class="nav-link {% if 'contacts' in request.path %}active{% endif %}"
        href="{% url 'contacts:contact_list' %}">
-        <i class="bi bi-person-lines-fill"></i> Contactos
+        <i class="bi bi-person-lines-fill"></i> <span class="sidebar-label">Contactos</span>
     </a>
 </li>
 
-    <li class="sidebar-section-label">Próximamente</li>
+    <li class="sidebar-section-label"><span class="sidebar-label">Próximamente</span></li>
 
   
     <li class="nav-item">
         <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
-            <i class="bi bi-clipboard-check"></i> Compliance
-            <span class="badge bg-secondary">pronto</span>
+            <i class="bi bi-clipboard-check"></i> <span class="sidebar-label">Compliance <span class="badge bg-secondary">pronto</span></span>
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
-            <i class="bi bi-file-earmark-text"></i> Documentos
-            <span class="badge bg-secondary">pronto</span>
+            <i class="bi bi-file-earmark-text"></i> <span class="sidebar-label">Documentos <span class="badge bg-secondary">pronto</span></span>
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link disabled text-muted" href="#" aria-disabled="true">
-            <i class="bi bi-graph-up-arrow"></i> Inteligencia
-            <span class="badge bg-secondary">pronto</span>
+            <i class="bi bi-graph-up-arrow"></i> <span class="sidebar-label">Inteligencia <span class="badge bg-secondary">pronto</span></span>
         </a>
     </li>
 
-    <li class="sidebar-section-label">Datos</li>
+    <li class="sidebar-section-label"><span class="sidebar-label">Datos</span></li>
     <li class="nav-item">
         <a class="nav-link {% if 'scraping' in request.path %}active{% endif %}" href="{% url 'scraping:raw_company_list' %}">
-            <i class="bi bi-globe"></i> Scraping
+            <i class="bi bi-globe"></i> <span class="sidebar-label">Scraping</span>
         </a>
     </li>
 </ul>
